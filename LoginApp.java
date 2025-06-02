@@ -16,12 +16,23 @@ import java.util.Base64;
 import java.util.List;
 import java.util.stream.Collectors;
 
+/**
+ * DEMO en memoria: usuarios (con contraseña encriptada) y galerías residirán sólo
+ * durante la ejecución.  No hay archivos ni base de datos.
+ *
+ * - Un usuario "admin" se crea por defecto con contraseña "admin" (SHA‑256).
+ * - Panel "Usuarios" sólo visible si el usuario autenticado es admin.
+ * - Cada usuario puede subir ≤5 imágenes y añadirles una descripción.
+ */
+
 public class LoginApp {
     public static void main(String[] args) {
         InMemoryStore.init();
         EventQueue.invokeLater(() -> new LoginFrame().setVisible(true));
     }
 }
+
+/***********************  ALMACÉN EN MEMORIA  **********************/
 
 class InMemoryStore {
     static final List<User> USERS = new ArrayList<>();
@@ -47,6 +58,8 @@ class InMemoryStore {
     }
 }
 
+/*************************  ENCRIPTACIÓN  *************************/
+
 class Crypto {
     static String hash(String plain) {
         try {
@@ -58,6 +71,8 @@ class Crypto {
         }
     }
 }
+
+/*************************  MODELOS  *************************/
 
 class User {
     final String username;
@@ -81,6 +96,8 @@ class GalleryItem {
         description = d;
     }
 }
+
+/***************************  LOGIN  *****************************/
 
 class LoginFrame extends JFrame {
     private final JTextField userField = new JTextField(15);
@@ -131,6 +148,8 @@ class LoginFrame extends JFrame {
     }
 }
 
+/***********************  VENTANA PRINCIPAL  **********************/
+
 class MainFrame extends JFrame {
     private User user;
 
@@ -167,6 +186,8 @@ class GreetingPanel extends JPanel {
         add(new JLabel(greeting));
     }
 }
+
+/***********************  PANEL GALERÍA  **************************/
 
 class GalleryPanel extends JPanel {
     private static final int MAX = 5;
@@ -219,6 +240,8 @@ class GalleryPanel extends JPanel {
         return label;
     }
 }
+
+/***********************  ADMIN USUARIOS  *************************/
 
 class UserAdminPanel extends JPanel {
     private final JList<String> list = new JList<>();
